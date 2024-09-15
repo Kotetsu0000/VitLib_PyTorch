@@ -7,6 +7,7 @@ setup_kwargs = {
         "author": "Kotetsu0000",
         'install_requires' : [
             'torch',
+            'opencv-python',
         ],
         'packages': find_packages(),
     }
