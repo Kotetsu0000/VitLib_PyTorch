@@ -21,7 +21,7 @@ class VGGBlock(nn.Module):
 
         return out
 
-class NestedUNet(nn.Module):
+class Nested_U_Net(nn.Module):
     def __init__(self, input_channels, out_classes, deepsupervision=False):
         super().__init__()
 
