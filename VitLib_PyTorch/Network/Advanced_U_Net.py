@@ -2,7 +2,7 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from module import VGG_Block, Residual_Block, RCAB
+from .module import VGG_Block, Residual_Block, RCAB
 
 class Conv_Block(nn.Module):
     def __init__(self, in_channel:int, out_channel:int, mode:str='vgg'):
