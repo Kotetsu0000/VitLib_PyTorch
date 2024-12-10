@@ -22,7 +22,7 @@ class VGGBlock(nn.Module):
         return out
 
 class Nested_U_Net(nn.Module):
-    def __init__(self, input_channels, out_classes, deepsupervision=False):
+    def __init__(self, input_channels, out_classes, deepsupervision=False, softmax=False):
         super().__init__()
 
         nb_filter = [32, 64, 128, 256, 512]
@@ -51,7 +51,10 @@ class Nested_U_Net(nn.Module):
 
         self.conv0_4 = VGGBlock(nb_filter[0]*4+nb_filter[1], nb_filter[0], nb_filter[0])
 
-        self.sigmoid = nn.Sigmoid()
+        if softmax:
+            self.sigmoid = nn.Softmax(dim=1)
+        else:
+            self.sigmoid = nn.Sigmoid()
         if self.deepsupervision:
             self.final1 = nn.Conv2d(nb_filter[0], out_classes, kernel_size=1)
             self.final2 = nn.Conv2d(nb_filter[0], out_classes, kernel_size=1)

@@ -59,10 +59,13 @@ class UP_Block(nn.Module):
         return out
 
 class Out_Block(nn.Module):
-    def __init__(self, in_channnel, out_channel):
+    def __init__(self, in_channnel, out_channel, softmax=False):
         super(Out_Block, self).__init__()
         self.conv = nn.Conv2d(in_channnel, out_channel, 1, bias=False)
-        self.sigmoid = nn.Sigmoid()
+        if softmax:        
+            self.sigmoid = nn.Softmax(dim=1)
+        else:
+            self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         out = self.conv(x)
@@ -70,7 +73,7 @@ class Out_Block(nn.Module):
         return out
 
 class U_Net(nn.Module):
-    def __init__(self, in_channel, out_classes, bilinear=True):
+    def __init__(self, in_channel, out_classes, bilinear=True, softmax=False):
         super(U_Net,self).__init__()
         self.Conv1 = Conv_Block(in_channel, 64) #128x128xin_channel => #128x128x64
         self.Block1 = Down_Block(64, 128)       # => #64x64x128
@@ -81,7 +84,7 @@ class U_Net(nn.Module):
         self.Block6 = UP_Block(512, 128, bilinear=bilinear)
         self.Block7 = UP_Block(256, 64, bilinear=bilinear)
         self.Block8 = UP_Block(128, 64, bilinear=bilinear)
-        self.Conv2 = Out_Block(64,out_classes)
+        self.Conv2 = Out_Block(64,out_classes, softmax=softmax)
 
     def forward(self, x):
         x1 = self.Conv1(x)
